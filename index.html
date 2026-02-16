@@ -505,7 +505,7 @@
     // Firebase Configuration
     // ⚠️ PENTING: Ganti config ini dengan config dari Firebase Console Anda!
     // Cara: Firebase Console → Project Settings → Your apps → Web app → Copy firebaseConfig
-    const firebaseConfig = {
+ const firebaseConfig = {
     apiKey: "AIzaSyDKiE6lTIAsCtKJ0vua1W1iIVObOsht-uo",
     authDomain: "dagang-cemilan.firebaseapp.com",
     databaseURL: "https://dagang-cemilan-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -1892,23 +1892,101 @@
     }
 
     async function saveProduct() {
-      try {
-        console.log('🔵 saveProduct() dipanggil');
-        
-        const name = document.getElementById('productName').value.trim();
-        const priceValue = document.getElementById('productPrice').value;
-        const price = parseInt(priceValue);
-        const inStock = document.getElementById('productInStock').checked;
-        const hasVariants = document.getElementById('productHasVariants').checked;
-        const variantsText = document.getElementById('productVariants').value.trim();
+  try {
+    const name = document.getElementById("productName").value.trim();
+    const priceValue = document.getElementById("productPrice").value;
+    const price = parseInt(priceValue);
 
-        console.log('📝 Data form:', { name, price, inStock, hasVariants, variantsText });
+    const inStock = document.getElementById("productInStock").checked;
+    const hasVariants = document.getElementById("productHasVariants").checked;
+    const variantsText = document.getElementById("productVariants").value.trim();
 
-        if (!name || !priceValue || isNaN(price) || price <= 0) {
-          alert('⚠️ Mohon lengkapi nama dan harga produk dengan benar!');
-          return;
+    if (!name || !priceValue || isNaN(price) || price <= 0) {
+      alert("⚠️ Nama dan harga wajib diisi!");
+      return;
+    }
+
+    const variants = hasVariants && variantsText
+      ? variantsText.split(",").map(v => v.trim()).filter(v => v)
+      : [];
+
+    const editId = document.getElementById("editProductId").value;
+
+    if (editId) {
+      const product = products.find(p => p.id === parseInt(editId));
+      if (!product) {
+        alert("❌ Produk tidak ditemukan!");
+        return;
+      }
+
+      product.name = name;
+      product.price = price;
+      product.inStock = inStock;
+      product.hasVariants = hasVariants;
+      product.variants = variants;
+
+      const fileInput = document.getElementById("productImage");
+
+      if (fileInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = async function (e) {
+          product.image = e.target.result;
+          await saveData();
+          closeProductForm();
+          renderAdminProducts();
+          renderProducts();
+          alert("✅ Produk berhasil diupdate!");
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        await saveData();
+        closeProductForm();
+        renderAdminProducts();
+        renderProducts();
+        alert("✅ Produk berhasil diupdate!");
+      }
+    } else {
+      const fileInput = document.getElementById("productImage");
+      if (fileInput.files.length === 0) {
+        alert("⚠️ Mohon pilih gambar produk!");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const newProduct = {
+          id: Date.now(),
+          name,
+          price,
+          image: e.target.result,
+          inStock,
+          hasVariants,
+          variants,
+          selectedVariant: hasVariants ? variants[0] : null,
+          quantity: 0
+        };
+
+        if (hasVariants) {
+          newProduct.quantities = {};
+          variants.forEach(v => newProduct.quantities[v] = 0);
         }
 
+        products.push(newProduct);
+
+        await saveData();
+        closeProductForm();
+        renderAdminProducts();
+        renderProducts();
+
+        alert("✅ Produk berhasil ditambahkan!");
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  } catch (error) {
+    console.error("❌ Error saveProduct():", error);
+    alert("❌ Error: " + error.message);
+  }
+}
         const variants = hasVariants && variantsText 
           ? variantsText.split(',').map(v => v.trim()).filter(v => v)
           : [];
