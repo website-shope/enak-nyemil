@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hidayatul Fahmi | Web & Roblox Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============ RESET & BASE ============ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --c: #00d9ff;
+      --p: #7B5EFF;
+      --p2: #a78bfa;
+      --dark: #050d1a;
+      --dark2: #080f20;
+      --dark3: #0c1629;
+      --card: rgba(255,255,255,.045);
+      --border: rgba(0,217,255,.14);
+      --text: #e2e8f0;
+      --muted: #6b82a0;
+      --green: #00ffb3;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Subtle dot grid */
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: 0;
+      background-image: radial-gradient(rgba(0,217,255,.055) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+    }
+
+    /* Ambient glow blobs */
+    .blob {
+      position: fixed; border-radius: 50%;
+      filter: blur(100px); pointer-events: none; z-index: 0;
+      animation: blobDrift 18s ease-in-out infinite;
+    }
+    .blob-1 { width:520px; height:520px; background:rgba(0,217,255,.07); top:-180px; left:-120px; }
+    .blob-2 { width:400px; height:400px; background:rgba(123,94,255,.08); bottom:-120px; right:-100px; animation-delay:-9s; }
+    @keyframes blobDrift {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(30px, 20px) scale(1.06); }
+    }
+
+    header, main, footer, .wa-float, #topBtn { position: relative; z-index: 1; }
+
+    /* ============ HEADER ============ */
+    header {
+      position: fixed; top: 0; width: 100%;
+      padding: 0 8%;
+      display: flex; justify-content: space-between; align-items: center;
+      height: 66px;
+      background: rgba(5,13,26,.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,217,255,.09);
+      z-index: 999;
+      transition: background .3s;
+    }
+    header.scrolled { background: rgba(5,13,26,.96); }
+
+    .header-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px; font-weight: 800;
+      background: linear-gradient(90deg, var(--c), var(--p2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: .5px;
+    }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a {
+      padding: 7px 14px; border-radius: 8px;
+      text-decoration: none; color: var(--muted);
+      font-size: 14px; font-weight: 600; transition: .25s; letter-spacing: .3px;
+    }
+    nav a:hover { color: var(--c); background: rgba(0,217,255,.07); }
+    .toggle-btn {
+      margin-left: 10px; cursor: pointer;
+      padding: 7px 16px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--c), var(--p));
+      color: white; font-weight: 700; font-size: 13px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: .25s; box-shadow: 0 0 18px rgba(0,217,255,.25);
+    }
+    .toggle-btn:hover { box-shadow: 0 0 30px rgba(0,217,255,.45); transform: translateY(-1px); }
+
+    /* Light mode */
+    body.light { background: #eef2ff; color: #0d1a36; }
+    body.light::before { background-image: radial-gradient(rgba(0,100,200,.05) 1px, transparent 1px); }
+    body.light header { background: rgba(238,242,255,.88); border-bottom-color: rgba(0,100,200,.1); }
+    body.light .header-logo { background: linear-gradient(90deg,#006bdc,#7B5EFF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    body.light nav a { color: #4a5568; }
+    body.light nav a:hover { color: #006bdc; background: rgba(0,107,220,.07); }
+    body.light .hero-text p { color: #4a5568; }
+    body.light .muted { color: #4a5568; }
+    body.light .card { background: rgba(255,255,255,.7); border-color: rgba(0,100,200,.12); color: #0d1a36; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+    body.light .card h4, body.light .card p, body.light .faq-a { color: #0d1a36; }
+    body.light .card p, body.light .faq-a { color: #4a5568; }
+    body.light .review-box { background: rgba(255,255,255,.7); color: #0d1a36; }
+    body.light .review-text { color: #0d1a36; }
+    body.light footer { background: rgba(0,0,0,.06); color: #4a5568; border-top-color: rgba(0,100,200,.1); }
+    body.light input, body.light textarea { background: white; color: #0d1a36; border-color: #c7d5f0; }
+    body.light #contact { background: #e8eeff; }
+    body.light .form-card { background: white; }
+    body.light .photo-mask { background: #eef2ff; }
+    body.light .blob-1 { background: rgba(0,100,200,.06); }
+    body.light .blob-2 { background: rgba(100,70,255,.06); }
+
+    /* ============ MAIN ============ */
+    main { padding-top: 66px; }
+
+    /* ============ HERO ============ */
+    .hero {
+      min-height: 100vh;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 72px 8% 80px;
+      gap: 48px;
+    }
+    .hero-text { max-width: 560px; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,217,255,.08); border: 1px solid rgba(0,217,255,.22);
+      padding: 5px 14px; border-radius: 30px;
+      font-size: 12px; font-weight: 700; color: var(--c);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 22px;
+      animation: fadeInUp .7s ease both;
+    }
+    .hero-eyebrow .dot-pulse {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--c);
+      animation: pulse 1.5s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+    .hero-text h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 52px; font-weight: 800; line-height: 1.1;
+      margin-bottom: 20px;
+      animation: fadeInUp .7s .1s ease both;
+    }
+    .grad {
+      background: linear-gradient(90deg, var(--c), var(--p2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    #typing { border-right: 2px solid var(--c); padding-right: 3px; }
+
+    .hero-text p {
+      font-size: 16px; line-height: 1.8; color: var(--muted);
+      margin-bottom: 32px; font-weight: 500;
+      animation: fadeInUp .7s .2s ease both;
+    }
+    .hero-text p b { color: var(--text); font-weight: 700; }
+    body.light .hero-text p b { color: #0d1a36; }
+
+    .hero-btns {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      animation: fadeInUp .7s .3s ease both;
+    }
+    .btn-primary {
+      padding: 13px 28px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--c), var(--p));
+      color: white; font-weight: 700; text-decoration: none;
+      font-size: 15px; display: inline-flex; align-items: center; gap: 8px;
+      transition: .3s; box-shadow: 0 0 28px rgba(0,217,255,.3);
+      border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(0,217,255,.55); }
+    .btn-secondary {
+      padding: 13px 28px; border-radius: 12px;
+      background: transparent; color: var(--text);
+      border: 1.5px solid rgba(255,255,255,.18);
+      font-weight: 700; text-decoration: none; font-size: 15px;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: .3s; font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .btn-secondary:hover { border-color: var(--c); color: var(--c); transform: translateY(-3px); }
+    body.light .btn-secondary { color: #0d1a36; border-color: rgba(0,0,0,.18); }
+    body.light .btn-secondary:hover { color: #006bdc; border-color: #006bdc; }
+
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 38px; flex-wrap: wrap;
+      animation: fadeInUp .7s .45s ease both;
+    }
+    .stat-n {
+      font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+      background: linear-gradient(90deg, var(--c), var(--p2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;
+    }
+    .stat-l { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .5px; margin-top: 2px; }
+
+    /* ============ PROFILE PHOTO — SPINNING RING ============ */
+    .hero-photo {
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      animation: fadeInUp .7s .3s ease both;
+    }
+
+    .photo-ring-wrap {
+      position: relative;
+      width: 300px; height: 300px;
+      display: flex; align-items: center; justify-content: center;
+      animation: floatY 4s ease-in-out infinite;
+    }
+    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+
+    /* Spinning gradient conic ring */
+    .photo-ring-wrap::before {
+      content: "";
+      position: absolute; inset: -5px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #00d9ff 0%, #7B5EFF 25%, #ff2d78 45%, #ffb800 60%, #00ffb3 80%, #00d9ff 100%
+      );
+      animation: spinRing 2.8s linear infinite;
+      z-index: 0;
+    }
+    @keyframes spinRing { to { transform: rotate(360deg); } }
+
+    /* Blurred glow ring behind */
+    .photo-ring-wrap::after {
+      content: "";
+      position: absolute; inset: -10px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #00d9ff 0%, #7B5EFF 25%, #ff2d78 45%, #ffb800 60%, #00ffb3 80%, #00d9ff 100%
+      );
+      animation: spinRing 2.8s linear infinite;
+      filter: blur(20px); opacity: .55; z-index: 0;
+    }
+
+    /* Dark gap mask between ring and photo */
+    .photo-mask {
+      position: absolute; inset: 7px; border-radius: 50%;
+      background: var(--dark); z-index: 1;
+      transition: background .3s;
+    }
+
+    /* Photo itself */
+    .hero-photo-inner {
+      position: relative; z-index: 2;
+      width: 278px; height: 278px;
+      border-radius: 50%; overflow: hidden;
+    }
+    .hero-photo-inner img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block; border-radius: 50%;
+    }
+    /* Shine overlay */
+    .hero-photo-inner::after {
+      content: "";
+      position: absolute; inset: 0; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Available badge */
+    .photo-badge {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      background: rgba(5,13,26,.9); backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,255,179,.3);
+      padding: 6px 18px; border-radius: 30px;
+      font-size: 12px; font-weight: 700; color: var(--green);
+      white-space: nowrap; z-index: 3;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .dot-green {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+      animation: pulse 1.5s ease infinite;
+    }
+
+    /* ============ SECTIONS ============ */
+    section { padding: 80px 8%; }
+
+    .sec-head { margin-bottom: 40px; }
+    .sec-head.center { text-align: center; }
+    .sec-head.center .sec-sub { margin: 0 auto; }
+
+    .sec-tag {
+      display: inline-block; font-size: 11px; font-weight: 700; color: var(--c);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .sec-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px; font-weight: 800; margin-bottom: 10px; line-height: 1.15;
+    }
+    body.light .sec-title { color: #0d1a36; }
+    .sec-sub {
+      font-size: 15px; color: var(--muted); font-weight: 500;
+      line-height: 1.7; max-width: 520px;
+    }
+
+    /* ============ CARDS ============ */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      padding: 28px 26px; border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s, border-color .4s, opacity .5s, translate .5s;
+      opacity: 0; translate: 0 28px;
+    }
+    .card.show { opacity: 1; translate: 0 0; }
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,217,255,.42);
+      box-shadow: 0 14px 40px rgba(0,217,255,.16);
+    }
+    .card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px; font-weight: 700; margin-bottom: 10px; color: white;
+    }
+    body.light .card h4 { color: #0d1a36; }
+    .card p { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 500; }
+    .card .btn-primary { margin-top: 18px; font-size: 13px; padding: 10px 20px; }
+
+    .service-icon {
+      width: 50px; height: 50px; border-radius: 14px; margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(0,217,255,.15), rgba(123,94,255,.15));
+      border: 1px solid rgba(0,217,255,.2);
+      display: flex; align-items: center; justify-content: center; font-size: 24px;
+    }
+
+    /* Pricing */
+    .card.popular {
+      border-color: rgba(0,217,255,.45);
+      background: linear-gradient(135deg, rgba(0,217,255,.06), rgba(123,94,255,.06));
+      box-shadow: 0 0 40px rgba(0,217,255,.1);
+    }
+    .popular-chip {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--c), var(--p));
+      color: white; font-size: 10px; font-weight: 800;
+      padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .price {
+      font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+      background: linear-gradient(90deg, var(--green), var(--c));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin: 14px 0 4px;
+    }
+    .price-sub { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+    /* FAQ */
+    .faq-q {
+      font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    body.light .faq-q { color: #0d1a36; }
+    .faq-q .icon { font-size: 18px; flex-shrink: 0; }
+    .faq-a { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 500; }
+
+    /* ============ TESTIMONIALS ============ */
+    #testimonials { background: rgba(0,0,0,.14); }
+    .review-wrap { position: relative; max-width: 620px; margin: 0 auto; }
+    .review-box {
+      padding: 36px 32px; border-radius: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      backdrop-filter: blur(14px); text-align: center;
+      transition: opacity .4s ease;
+    }
+    .review-stars { font-size: 22px; margin-bottom: 16px; letter-spacing: 4px; color: #fbbf24; }
+    .review-text { font-size: 17px; font-style: italic; color: var(--text); line-height: 1.8; margin-bottom: 18px; font-weight: 500; }
+    .review-author { font-size: 14px; font-weight: 700; color: var(--c); }
+    .review-dots { display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
+    .rdot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.2); transition: .3s; cursor: pointer;
+    }
+    .rdot.active { background: var(--c); transform: scale(1.3); }
+
+    /* ============ ORDER FORM ============ */
+    #contact { background: var(--dark2); }
+    .form-card {
+      max-width: 560px; margin: 0 auto;
+      background: rgba(255,255,255,.03); border: 1px solid var(--border);
+      border-radius: 24px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    .form-card-head {
+      background: linear-gradient(135deg, rgba(0,217,255,.09), rgba(123,94,255,.09));
+      border-bottom: 1px solid var(--border);
+      padding: 24px 30px; display: flex; align-items: center; gap: 14px;
+    }
+    .form-head-icon {
+      width: 50px; height: 50px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--c), var(--p));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; box-shadow: 0 0 20px rgba(0,217,255,.3);
+    }
+    .form-card-head h4 {
+      font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white; margin-bottom: 3px;
+    }
+    body.light .form-card-head h4 { color: #0d1a36; }
+    .form-card-head p { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .form-body { padding: 26px 30px; display: flex; flex-direction: column; gap: 14px; }
+    .flabel {
+      display: block; font-size: 11px; font-weight: 700; color: var(--c);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 7px;
+    }
+    input, textarea {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,.04);
+      border: 1.5px solid rgba(0,217,255,.14);
+      border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--text); outline: none; transition: .25s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--c); background: rgba(0,217,255,.04);
+      box-shadow: 0 0 0 4px rgba(0,217,255,.08);
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    textarea { resize: vertical; min-height: 90px; }
+    .btn-submit {
+      padding: 14px; border: none; border-radius: 14px; cursor: pointer;
+      font-weight: 800; font-size: 15px; letter-spacing: .3px;
+      background: linear-gradient(135deg, var(--c), var(--p));
+      color: white; transition: .3s; font-family: 'Plus Jakarta Sans', sans-serif;
+      box-shadow: 0 0 24px rgba(0,217,255,.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 0 45px rgba(0,217,255,.5); }
+
+    /* ============ FOOTER ============ */
+    footer {
+      padding: 26px 8%;
+      background: rgba(0,0,0,.3);
+      border-top: 1px solid rgba(0,217,255,.08);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 14px;
+    }
+    .footer-left { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .footer-left .hl { color: var(--c); font-weight: 700; }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      font-weight: 600; transition: .2s;
+    }
+    .footer-links a:hover { color: var(--c); }
+
+    /* ============ FLOATING BUTTONS ============ */
+    .wa-float {
+      position: fixed; bottom: 86px; right: 22px;
+      background: #25D366; color: white;
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; text-decoration: none;
+      box-shadow: 0 6px 24px rgba(37,211,102,.4); transition: .3s; z-index: 999;
+    }
+    .wa-float:hover { transform: scale(1.12); box-shadow: 0 8px 32px rgba(37,211,102,.6); }
+    #topBtn {
+      position: fixed; bottom: 26px; right: 22px;
+      width: 48px; height: 48px; border: none; border-radius: 50%;
+      background: linear-gradient(135deg, var(--c), var(--p));
+      color: white; font-size: 18px; cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,217,255,.35); transition: .3s; z-index: 999;
+      display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    #topBtn:hover { transform: scale(1.12) translateY(-2px); box-shadow: 0 0 35px rgba(0,217,255,.6); }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,217,255,.12), transparent);
+      margin: 0;
+    }
+
+    /* ============ KEYFRAMES ============ */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(26px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 860px) {
+      .hero { flex-direction: column-reverse; text-align: center; padding: 56px 6% 72px; gap: 36px; min-height: unset; padding-top: 100px; }
+      .hero-btns { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .hero-text h2 { font-size: 38px; }
+      .hero-text p { margin: 0 auto 28px; }
+      .hero-eyebrow { margin: 0 auto 20px; }
+      nav a { display: none; }
+      section { padding: 60px 6%; }
+      footer { justify-content: center; text-align: center; }
+    }
+    @media (max-width: 520px) {
+      .hero-text h2 { font-size: 30px; }
+      .sec-title { font-size: 28px; }
+      .photo-ring-wrap { width: 240px; height: 240px; }
+      .hero-photo-inner { width: 218px; height: 218px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Ambient blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- ============ HEADER ============ -->
+<header id="header">
+  <div class="header-logo">Hidayatul Fahmi</div>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Order</a>
+    <button class="toggle-btn" onclick="toggleMode()">🌙 Mode</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+
+  <div class="hero-text">
+    <div class="hero-eyebrow">
+      <span class="dot-pulse"></span> Open for Projects
+    </div>
+    <h2>Saya Developer<br><span class="grad" id="typing"></span></h2>
+    <p>
+      Saya siap membantu Anda membuat <b>Website Premium Modern</b> dan
+      <b>Roblox Maps Cinematic</b> yang keren.
+      Harga mulai <b>Rp150.000</b> — cepat, profesional, siap pakai. 🚀
+    </p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#contact"
+         onclick="event.preventDefault(); document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        Order Sekarang 🚀
+      </a>
+      <a class="btn-secondary" href="#portfolio"
+         onclick="event.preventDefault(); document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">
+        Lihat Portfolio →
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-n">50+</div>
+        <div class="stat-l">Projects Done</div>
+      </div>
+      <div>
+        <div class="stat-n">100%</div>
+        <div class="stat-l">Client Puas</div>
+      </div>
+      <div>
+        <div class="stat-n">3hr</div>
+        <div class="stat-l">Respon Cepat</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE PHOTO WITH SPINNING RING -->
+  <div class="hero-photo">
+    <div class="photo-ring-wrap">
+      <div class="photo-mask"></div>
+      <div class="hero-photo-inner">
+        <img src="profile.png" alt="Hidayatul Fahmi">
+      </div>
+      <div class="photo-badge">
+        <span class="dot-green"></span> Available for Hire
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ SERVICES ============ -->
+<section id="services">
+  <div class="sec-head center">
+    <div class="sec-tag">What I Do</div>
+    <div class="sec-title">My Services</div>
+    <p class="sec-sub">Hasil premium dengan kualitas agency level — delivered tepat waktu dan sesuai kebutuhan.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="service-icon">🌐</div>
+      <h4>Website Modern</h4>
+      <p>Landing page, toko online, portfolio profesional. Fast loading, mobile-friendly, dan siap digunakan untuk bisnis Anda.</p>
+    </div>
+    <div class="card">
+      <div class="service-icon">🎮</div>
+      <h4>Roblox Maps</h4>
+      <p>Adventure, city roleplay, simulator, horror, tycoon — environment detail tinggi dan visual sinematik kelas premium.</p>
+    </div>
+    <div class="card">
+      <div class="service-icon">⚡</div>
+      <h4>Super Fast Support</h4>
+      <p>Respon dalam 3 jam, pengerjaan rapi & terstruktur, revisi gratis hingga Anda benar-benar puas dengan hasilnya.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="portfolio">
+  <div class="sec-head center">
+    <div class="sec-tag">Portfolio</div>
+    <div class="sec-title">Demo Projects</div>
+    <p class="sec-sub">Contoh website & Roblox map yang bisa Anda jadikan referensi untuk project Anda.</p>
+  </div>
+  <div class="grid">
+    <div class="card show" style="text-align:center">
+      <div class="service-icon" style="margin:0 auto 16px">🍔</div>
+      <h4>Bisnis Makanan</h4>
+      <p>Website food modern ala ShopeeFood — menu, form order, promo strip, dan tampilan profesional siap pakai.</p>
+      <a class="btn-primary" href="demo-food.html">Lihat Demo →</a>
+    </div>
+    <div class="card show" style="text-align:center">
+      <div class="service-icon" style="margin:0 auto 16px">🛒</div>
+      <h4>Toko Online</h4>
+      <p>Website shop ala Shopee — flash sale, kategori, product grid, filter, dan checkout form yang lengkap.</p>
+      <a class="btn-primary" href="demo-shop.html">Lihat Demo →</a>
+    </div>
+    <div class="card show" style="text-align:center">
+      <div class="service-icon" style="margin:0 auto 16px">🎮</div>
+      <h4>Roblox Map Studio</h4>
+      <p>Website jasa Roblox map premium — portfolio, paket harga, proses kerja, dan form order cinematic.</p>
+      <a class="btn-primary" href="demo-roblox.html">Lihat Demo →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="sec-head center">
+    <div class="sec-tag">Pricing</div>
+    <div class="sec-title">Paket Harga</div>
+    <p class="sec-sub">Pilih paket yang sesuai kebutuhan. Semua sudah termasuk revisi gratis sampai puas.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h4>🌐 Basic Website</h4>
+      <p>Landing page clean & profesional untuk UMKM atau personal brand. Fast loading & mobile-friendly.</p>
+      <div class="price">Rp150.000</div>
+      <div class="price-sub">Pengerjaan 1–2 hari</div>
+    </div>
+    <div class="card popular">
+      <div class="popular-chip">⚡ Terpopuler</div>
+      <h4>🚀 Pro Website</h4>
+      <p>Premium design + animasi smooth + form order terintegrasi. Cocok untuk bisnis yang ingin tampil profesional.</p>
+      <div class="price">Rp250.000</div>
+      <div class="price-sub">Pengerjaan 2–3 hari</div>
+    </div>
+    <div class="card">
+      <h4>🎮 Roblox Map</h4>
+      <p>Custom map cinematic detail tinggi — adventure, city, simulator, horror, atau tycoon. Fully optimized.</p>
+      <div class="price">Rp200.000+</div>
+      <div class="price-sub">Durasi sesuai skala project</div>
+    </div>
+    <div class="card">
+      <h4>🔥 Bundle Package</h4>
+      <p>Website Premium + Roblox Map dalam satu paket hemat. Hasil maksimal dengan harga terbaik.</p>
+      <div class="price">Rp300.000+</div>
+      <div class="price-sub">Best deal — lebih hemat</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="sec-head center">
+    <div class="sec-tag">FAQ</div>
+    <div class="sec-title">Pertanyaan Umum</div>
+    <p class="sec-sub">Hal-hal yang sering ditanyakan sebelum order. Masih ada pertanyaan? Chat langsung!</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="faq-q"><span class="icon">⏳</span> Berapa lama pengerjaan?</div>
+      <div class="faq-a">Website selesai 1–3 hari. Roblox map tergantung skala & kompleksitas, biasanya 3–12 hari.</div>
+    </div>
+    <div class="card">
+      <div class="faq-q"><span class="icon">💳</span> Bisa bayar DP dulu?</div>
+      <div class="faq-a">Bisa! Pembayaran fleksibel — DP 50% di awal, sisanya setelah project selesai dan disetujui.</div>
+    </div>
+    <div class="card">
+      <div class="faq-q"><span class="icon">🔄</span> Apakah ada revisi?</div>
+      <div class="faq-a">Ada! Revisi gratis sampai Anda benar-benar puas. Kepuasan klien adalah prioritas utama saya.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="testimonials">
+  <div class="sec-head center">
+    <div class="sec-tag">Reviews</div>
+    <div class="sec-title">Client Reviews</div>
+    <p class="sec-sub">Kata mereka yang sudah merasakan hasil kerja saya.</p>
+  </div>
+  <div class="review-wrap">
+    <div class="review-box" id="reviewBox">
+      <div class="review-stars">★★★★★</div>
+      <div class="review-text">"Websitenya modern banget, animasi smooth, dan loading super cepat. Responsif di semua device. Puas banget!"</div>
+      <div class="review-author">— Client UMKM, Jakarta</div>
+    </div>
+    <div class="review-dots">
+      <div class="rdot active" onclick="goReview(0)"></div>
+      <div class="rdot" onclick="goReview(1)"></div>
+      <div class="rdot" onclick="goReview(2)"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ ORDER FORM ============ -->
+<section id="contact">
+  <div class="sec-head center">
+    <div class="sec-tag">Order</div>
+    <div class="sec-title">Order Sekarang</div>
+    <p class="sec-sub">Isi form di bawah dan pesanan Anda langsung terkirim via WhatsApp.</p>
+  </div>
+  <div class="form-card">
+    <div class="form-card-head">
+      <div class="form-head-icon">🚀</div>
+      <div>
+        <h4>Mulai Project Anda</h4>
+        <p>Respon dalam 3 jam — cepat & profesional</p>
+      </div>
+    </div>
+    <div class="form-body">
+      <div>
+        <label class="flabel">Nama Lengkap</label>
+        <input id="nama" type="text" placeholder="Nama Anda..." required>
+      </div>
+      <div>
+        <label class="flabel">Project yang Diinginkan</label>
+        <input id="project" type="text" placeholder="Website / Roblox Map / Bundle..." required>
+      </div>
+      <div>
+        <label class="flabel">Detail Pesanan</label>
+        <textarea id="detail" placeholder="Ceritakan kebutuhan Anda — tema, fitur, referensi, dll..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="sendWA()">
+        <span>💬</span> Kirim ke WhatsApp
+      </button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-left">© 2026 <span class="hl">Hidayatul Fahmi</span> — Web & Roblox Developer</div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Order</a>
+  </div>
+</footer>
+
+<!-- Floating -->
+<a href="https://wa.me/6285175005374" target="_blank" class="wa-float" title="Chat WhatsApp">💬</a>
+<button onclick="window.scrollTo({top:0,behavior:'smooth'})" id="topBtn" title="Back to Top">↑</button>
+
+<script>
+  /* HEADER SCROLL EFFECT */
+  window.addEventListener('scroll', () => {
+    document.getElementById('header').classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  /* LIGHT MODE */
+  function toggleMode() {
+    document.body.classList.toggle('light');
+  }
+
+  /* TYPING EFFECT — type + backspace loop */
+  const textList = ["Website Premium 🌐", "Roblox Maps Keren 🎮", "Fast & Modern 🚀"];
+  let tIdx = 0, tChar = 0, tDel = false;
+  const typingEl = document.getElementById("typing");
+
+  function typeLoop() {
+    const current = textList[tIdx];
+    if (!tDel) {
+      typingEl.textContent = current.substring(0, tChar + 1);
+      tChar++;
+      if (tChar === current.length) {
+        tDel = true;
+        setTimeout(typeLoop, 1800);
+        return;
+      }
+      setTimeout(typeLoop, 78);
+    } else {
+      typingEl.textContent = current.substring(0, tChar - 1);
+      tChar--;
+      if (tChar === 0) {
+        tDel = false;
+        tIdx = (tIdx + 1) % textList.length;
+      }
+      setTimeout(typeLoop, 42);
+    }
+  }
+  typeLoop();
+
+  /* CARD SCROLL REVEAL with stagger */
+  const cards = document.querySelectorAll(".card:not(.show)");
+  const obs = new IntersectionObserver(entries => {
+    let delay = 0;
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add("show"), delay);
+        delay += 80;
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  cards.forEach(c => obs.observe(c));
+
+  /* REVIEWS */
+  const reviews = [
+    { stars:"★★★★★", text:'"Websitenya modern banget, animasi smooth, dan loading super cepat. Responsif di semua device. Puas banget!"', author:"— Client UMKM, Jakarta" },
+    { stars:"★★★★★", text:'"Map Roblox-nya detail luar biasa! Environment sinematik, performa oke di semua device. Recommended 100%!"', author:"— Roblox Game Developer" },
+    { stars:"★★★★★", text:'"Respon cepat, pengerjaan profesional, dan hasilnya melebihi ekspektasi saya. Pasti order lagi!"', author:"— Online Shop Owner, Surabaya" }
+  ];
+  let rIdx = 0;
+  const reviewBox = document.getElementById("reviewBox");
+  const dots = document.querySelectorAll(".rdot");
+
+  function goReview(i) {
+    rIdx = i;
+    reviewBox.style.opacity = "0";
+    setTimeout(() => {
+      reviewBox.innerHTML = `
+        <div class="review-stars">${reviews[i].stars}</div>
+        <div class="review-text">${reviews[i].text}</div>
+        <div class="review-author">${reviews[i].author}</div>`;
+      reviewBox.style.opacity = "1";
+    }, 320);
+    dots.forEach((d, idx) => d.classList.toggle("active", idx === i));
+  }
+
+  setInterval(() => goReview((rIdx + 1) % reviews.length), 4200);
+
+  /* SEND WA */
+  function sendWA() {
+    const nama    = document.getElementById("nama").value.trim();
+    const project = document.getElementById("project").value.trim();
+    const detail  = document.getElementById("detail").value.trim();
+    if (!nama || !project) { alert("Harap isi nama dan jenis project terlebih dahulu."); return; }
+    const msg = `Halo Hidayatul, saya mau order jasa:%0A%0A👤 Nama: ${nama}%0A📌 Project: ${project}%0A📝 Detail: ${detail}`;
+    window.open("https://wa.me/6285175005374?text=" + msg, "_blank");
+  }
+</script>
+</body>
+</html>
